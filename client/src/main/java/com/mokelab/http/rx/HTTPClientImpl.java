@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
+import io.reactivex.SingleOnSubscribe;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -27,10 +27,10 @@ public class HTTPClientImpl implements HTTPClient {
     }
 
     @Override
-    public Observable<HTTPResponse> send(final Method method, final String url, final Header header, final String body) {
-        return Observable.create(new ObservableOnSubscribe<HTTPResponse>() {
+    public Single<HTTPResponse> send(final Method method, final String url, final Header header, final String body) {
+        return Single.create(new SingleOnSubscribe<HTTPResponse>() {
             @Override
-            public void subscribe(ObservableEmitter<HTTPResponse> e) throws Exception {
+            public void subscribe(SingleEmitter<HTTPResponse> e) throws Exception {
                 Request.Builder builder = new Request.Builder();
                 switch (method) {
                 case GET:
@@ -67,8 +67,7 @@ public class HTTPClientImpl implements HTTPClient {
                 }
                 httpResponse.header = new HeaderImpl(response.headers());
 
-                e.onNext(httpResponse);
-                e.onComplete();
+                e.onSuccess(httpResponse);
             }
         });
     }
