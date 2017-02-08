@@ -9,7 +9,7 @@ repositories {
 uploadArchives {
     repositories.mavenDeployer {
         repository url: "file://$System.env.HOME/.m2/repository"
-        pom.version = '1.0.0'
+        pom.version = '2.0.0'
         pom.groupId = 'com.mokelab'
         pom.artifactId = 'http-client-rx-okhttp'
     }
@@ -26,13 +26,14 @@ android {
 
 dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
-    compile 'com.mokelab:http-client-rx:1.0.0'
+    compile 'com.mokelab:http-client-rx:2.0.0'
     testCompile 'junit:junit:4.12'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    androidTestCompile 'com.android.support:support-annotations:25.0.1'
+    androidTestCompile 'com.android.support:support-annotations:25.1.1'
     androidTestCompile 'io.reactivex.rxjava2:rxandroid:2.0.0'
+    compile 'io.reactivex.rxjava2:rxjava:2.0.0'
 }
 
 task sourcesJar(type: Jar) {

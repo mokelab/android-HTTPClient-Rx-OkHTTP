@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Observer;
+import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -34,14 +34,14 @@ public class HTTPClientImplTest {
         client.send(Method.GET, "https://gae-echoserver.appspot.com/test", null, null)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<HTTPResponse>() {
+                .subscribe(new SingleObserver<HTTPResponse>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(HTTPResponse response) {
+                    public void onSuccess(HTTPResponse response) {
                         result.put("response", response);
                         result.put("exception", null);
                         latch.countDown();
@@ -52,11 +52,6 @@ public class HTTPClientImplTest {
                         result.put("response", null);
                         result.put("exception", e);
                         latch.countDown();
-                    }
-
-                    @Override
-                    public void onComplete() {
-
                     }
                 });
         latch.await(3000, TimeUnit.MILLISECONDS);
