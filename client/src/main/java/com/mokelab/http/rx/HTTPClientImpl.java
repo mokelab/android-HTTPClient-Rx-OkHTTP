@@ -54,7 +54,9 @@ public class HTTPClientImpl implements HTTPClient {
                 try {
                     response = client.newCall(request).execute();
                 } catch (IOException e2) {
-                    e.onError(new HTTPException(e2));
+                    if (!e.isDisposed()) {
+                        e.onError(new HTTPException(e2));
+                    }
                     return;
                 }
 
