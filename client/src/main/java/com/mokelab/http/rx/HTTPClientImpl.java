@@ -53,23 +53,22 @@ public class HTTPClientImpl implements HTTPClient {
                 Response response;
                 try {
                     response = client.newCall(request).execute();
+
+                    HTTPResponse httpResponse = new HTTPResponse();
+                    httpResponse.status = response.code();
+                    if (httpResponse.status == 204) {
+                        httpResponse.body = "";
+                    } else {
+                        httpResponse.body = response.body().string();
+                    }
+                    httpResponse.header = new HeaderImpl(response.headers());
+
+                    e.onSuccess(httpResponse);
                 } catch (IOException e2) {
                     if (!e.isDisposed()) {
                         e.onError(new HTTPException(e2));
                     }
-                    return;
                 }
-
-                HTTPResponse httpResponse = new HTTPResponse();
-                httpResponse.status = response.code();
-                if (httpResponse.status == 204) {
-                    httpResponse.body = "";
-                } else {
-                    httpResponse.body = response.body().string();
-                }
-                httpResponse.header = new HeaderImpl(response.headers());
-
-                e.onSuccess(httpResponse);
             }
         });
     }
